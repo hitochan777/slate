@@ -67,7 +67,11 @@ export const getCharacterDistance = (str: string, isRTL = false): number => {
     }
 
     if (isKeycapStart(code)) {
-      if (previousType === CodepointType.Keycap) break
+      if (
+        previousType === CodepointType.Keycap ||
+        previousType === CodepointType.Character
+      )
+        break
 
       distance += codepoint.length
       previousType = CodepointType.Keycap
@@ -75,6 +79,9 @@ export const getCharacterDistance = (str: string, isRTL = false): number => {
       continue
     }
     if (isKeycapEnd(code)) {
+      if (previousType === CodepointType.Character) {
+        break
+      }
       distance += codepoint.length
       break
     }
@@ -132,7 +139,11 @@ export const getCharacterDistance = (str: string, isRTL = false): number => {
 
     // If previous and curent codepoints are regular characters. it means we are
     // not in a sequence.
-    if (previousType === CodepointType.Character) break
+    if (
+      previousType === CodepointType.Character ||
+      previousType === CodepointType.Keycap
+    )
+      break
 
     distance += codepoint.length
     previousType = CodepointType.Character
